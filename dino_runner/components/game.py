@@ -33,14 +33,14 @@ class Game:
                 self.playing = False
 
     def update(self):
-        user_input = pygame.key.get_pressed()
-        self.player.update(user_input)
+        user_input = pygame.key.get_pressed() #de pygame (key)el modulo tecla.(get_pressed) nos devuelva la tecla presionada
+        self.player.update(user_input)   #le pasamos al metodo update de nuestra clase dinosaur
 
     def draw(self):
         self.clock.tick(FPS)
         self.screen.fill((255, 255, 255))
         self.draw_background()
-        self.player.draw(self.screen)
+        self.player.draw(self.screen) #despues de que se dibuja le pasamos el screen
         pygame.display.update()
         pygame.display.flip()
 
