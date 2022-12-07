@@ -8,7 +8,7 @@ class Dinosaur(Sprite):
     X_POS = 80
     Y_POS = 310
     JUMP_VELOCITY = 8.5
-    Y_POS_DUCK = 340
+    Y_POS_DUCK = 340 #La posicion en y cuando el Dino se agache
 
     def __init__(self):
         self.image = RUNNING[0]   
@@ -25,6 +25,7 @@ class Dinosaur(Sprite):
     def update(self, user_input):
         if self.running:
            self.run()
+
         elif self.jumping:
             self.jump()
         elif self.dino_duck:
@@ -33,24 +34,25 @@ class Dinosaur(Sprite):
         if user_input[pygame.K_UP] and not self.jumping:
             self.jumping = True
             self.running = False
-        elif not self.jumping:
-            self.running = True
+            self.dino_duck = False
 
-        if user_input[pygame.K_DOWN] and not self.jumping:
+        elif user_input[pygame.K_DOWN] and not self.jumping:
             self.dino_duck= True
             self.running = False
             self.jumping = False
-        elif not self.jumping:
+        elif not self.jumping: #si no esta saltando se devuelve que el Dino siga corriendo y las posiciones originales
             self.running = True
-            self.dino_rect.x = self.X_POS
-            self.dino_rect.y = self.Y_POS
-
+            self.dino_duck =False
+            self.jumping = False
+            
         if self.step_index >= 10:
             self.step_index = 0 #si pasa index pasa los 10 se resetea a 0 y se vueve a comenzar
     
     def run (self):
-         self.image = RUNNING[0] if self.step_index < 5 else RUNNING[1] #operacion ternaria si el index se cumple se asigna RUNNING[0] caso contrario RUNNING[1]
-         self.step_index += 1 #variable aux para aumentar
+        self.image = RUNNING[0] if self.step_index < 5 else RUNNING[1] #operacion ternaria si el index se cumple se asigna RUNNING[0] caso contrario RUNNING[1]
+        self.step_index += 1 #variable aux para aumentar
+        self.dino_rect.x = self.X_POS
+        self.dino_rect.y = self.Y_POS
     
     def jump(self):
         self.image = JUMPING
@@ -63,7 +65,7 @@ class Dinosaur(Sprite):
     def duck(self):
         self.image = DUCKING[0] if self.step_index < 5 else DUCKING[1] #operacion ternaria si el index se cumple se asigna RUNNING[0] caso contrario RUNNING[1]
         self.dino_rect.x = self.X_POS
-        self.dino_rect.y = self.Y_POS_DUCK
+        self.dino_rect.y = self.Y_POS_DUCK #la nuevo posicion en y para que se agache
         self.step_index += 1 #variable aux para aumentar
 
     def draw(self, screen):
