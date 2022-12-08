@@ -2,9 +2,7 @@ import pygame
 
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
-from dino_runner.components.score import Score
-from dino_runner.utils.constants import BG, DINO_START, FORNT_STYLE, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
-
+from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
 
 
 class Game:
@@ -21,38 +19,25 @@ class Game:
 
         self.player = Dinosaur()
         self.obstacle_manager = ObstacleManager()
-        self.score = Score()
-        self.death_count = 0
-
-        self.executing = False
-    
-    def execute(self):   #otro punto de inicio
-        self.executing = True
-        while self.executing: # se ejecuta mientras el juego este corriendo 
-            if not self.playing:  #y si no mostramos el menu 
-                self.show_menu()
-        pygame.quit()
 
     def run(self):
         # Game loop: events - update - draw
         self.playing = True
-        self.obstacle_manager.reset_obstacles() #para reseterar los obstaculos cuando pierda
         while self.playing:
             self.events()
             self.update()
             self.draw()
+        pygame.quit()
 
     def events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.playing = False
-                self.executing = False
 
     def update(self):
         user_input = pygame.key.get_pressed() #de pygame (key)el modulo tecla.(get_pressed) nos devuelva la tecla presionada
         self.player.update(user_input)   #le pasamos al metodo update de nuestra clase dinosaur
         self.obstacle_manager.update(self) #llamamos para que se actualize los obstaculos 
-        self.score.update(self)
 
     def draw(self):
         self.clock.tick(FPS)
@@ -60,8 +45,7 @@ class Game:
         self.draw_background()
         self.player.draw(self.screen) #despues de que se dibuja le pasamos el screen
         self.obstacle_manager.draw(self.screen) #hacemos que se dibujen los obstaculos
-        self.score.draw(self.screen)
-        pygame.display.update()  #pygame.display para actualizar la pantalla
+        pygame.display.update()
         pygame.display.flip()
 
     def draw_background(self):
@@ -71,41 +55,4 @@ class Game:
         if self.x_pos_bg <= -image_width:
             self.screen.blit(BG, (image_width + self.x_pos_bg, self.y_pos_bg))
             self.x_pos_bg = 0
-        self.x_pos_bg -= self.game_speed    
-     
-    def draw_score(self):
-        pass
-
-    def show_menu(self):
-        #Poner color al fondo*
-        self.screen.fill((255,255,255))
-        half_screen_width = SCREEN_WIDTH // 2  
-        half_screen_height = SCREEN_HEIGHT // 2
-        #Mostrar mensaje de inicio
-        if not self.death_count:
-            font = pygame.font.Font(FORNT_STYLE, 30) #nombre de la fuente y el tamaño
-            message = font.render('press any key to start', True, (0, 0, 0)) #render nos permite pasar cual str que queramos 
-            message_rect = message.get_rect()
-            message_rect.center = (half_screen_width, half_screen_height)
-            self.screen.blit(message, message_rect)
-        else:
-            #tarea
-            #Mostrar puntos obtenidos
-            #Mostrar mensaje de reinicio
-            #Mostrar muertes totales
-            print(self.death_count)
-
-        #Mostrar imagen como icono
-        self.screen.blit(DINO_START, (half_screen_width - 20, half_screen_height -140)) #movemos la imagen que queremos que aparezca para que no se solapen con el centro
-        #Actualizar pantalla
-        pygame.display.flip()
-        #Manejar eventos
-        self.handle_menu_events()
-
-    def handle_menu_events(self):
-        for event in pygame.event.get():   #iteramos sobre los eventos
-            if event.type == pygame.QUIT:  #si se3 salio, salimos de todo
-                self.playing = False       
-                self.executing = False
-            elif event.type == pygame.KEYDOWN:  #si no tratamos de ver de que tipo es el vento si es igual a cualquier tecla precionda hacemos correr el run (el juego)
-                self.run()
+        self.x_pos_bg -= self.game_speed
