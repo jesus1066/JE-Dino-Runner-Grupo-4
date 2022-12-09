@@ -6,7 +6,7 @@ from dino_runner.utils.constants import LARGE_CACTUS, SMALL_CACTUS
 class Cactus(Obstacle):
     CACTUS = {
         "LARGE": (LARGE_CACTUS, 300),     #constante de la posicion en y donde queremos que este el cactus
-        "SMALL": (SMALL_CACTUS, 325),
+        "SMALL": (SMALL_CACTUS, 330),
     }
 
     def __init__(self, cactus_type):

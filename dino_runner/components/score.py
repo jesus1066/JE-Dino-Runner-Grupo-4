@@ -9,7 +9,6 @@ class Score:
 
     def update(self, game):
         self.current_score += 1
-        game.total_score +=1
         if self.current_score % 100 == 0:  #por cada 100 puntos se incrementera la velocidad en +2
             game.game_speed += 2
     
